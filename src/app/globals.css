@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink: #0e2744;
+  --accent: #1e6bb8;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--ink);
+  background: #ffffff;
+}
+
+.prose-article {
+  @apply text-[17px] leading-8 text-slate-700;
+}
+
+.prose-article h2 {
+  @apply font-serif text-3xl text-ink mt-12 mb-4;
+}
+
+.prose-article p {
+  @apply mb-5;
+}
+
+.prose-article ul {
+  @apply mb-5 ml-5 list-disc space-y-2;
+}
+
+.prose-article a {
+  @apply text-accent underline decoration-navy-200 underline-offset-4 hover:text-navy-800;
+}
+
+.card-lift {
+  @apply transition-transform duration-300 hover:-translate-y-1 hover:shadow-card;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(30, 107, 184, 0.15);
+}

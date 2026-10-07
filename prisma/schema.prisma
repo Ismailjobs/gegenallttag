@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          String @id @default(cuid())
+  name        String
+  slug        String @unique
+  description String
+  posts       Post[]
+}
+
+model TargetTopic {
+  id             String   @id @default(cuid())
+  title          String
+  clusterKeyword String
+  categorySlug   String
+  targetLinkUrl  String?
+  targetAnchor   String?
+  editorPrompt   String   @default("")
+  webResearch    Boolean  @default(true)
+  status         String   @default("PENDING")
+  createdAt      DateTime @default(now())
+}
+
+model Post {
+  id            String    @id @default(cuid())
+  slug          String    @unique
+  title         String
+  subtitle      String?
+  metaTitle     String
+  metaDesc      String
+  readingTime   Int       @default(5)
+  categoryId    String
+  category      Category  @relation(fields: [categoryId], references: [id])
+  content       String
+  tableJson     String?
+  checklistJson String?
+  faqJson       String?
+  schemaJson    String?
+  coverImage    String?
+  status        String    @default("DRAFT")
+  scheduledFor  DateTime?
+  publishedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}

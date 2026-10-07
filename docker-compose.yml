@@ -1,0 +1,29 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gegen-alltag
+    ports:
+      - "3030:3030"
+    env_file:
+      - .env
+    environment:
+      PORT: "3030"
+      HOSTNAME: "0.0.0.0"
+      DATABASE_URL: "file:/app/data/prod.db"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3030').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 25s
