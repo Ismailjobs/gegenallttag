@@ -91,7 +91,7 @@ function paramsFor(model: string, prompt: string): OpenAI.Images.ImageGeneratePa
 }
 
 function unique(values: string[]) {
-  return [...new Set(values.filter(Boolean))];
+  return Array.from(new Set(values.filter(Boolean)));
 }
 
 async function compressToWebp(input: Buffer) {
