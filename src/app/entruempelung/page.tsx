@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import CategoryPage from "@/components/CategoryPageServer";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Entrümpelung in Wien und Niederösterreich",
   description:

@@ -14,7 +14,10 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URL="file:/tmp/build.db"
-RUN mkdir -p /tmp && npx prisma generate && npm run build
+RUN mkdir -p /tmp \
+  && npx prisma generate \
+  && npx prisma db push --skip-generate \
+  && npm run build
 
 FROM node:20-alpine AS runner
 RUN apk add --no-cache libc6-compat openssl
