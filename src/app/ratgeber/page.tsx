@@ -18,7 +18,7 @@ export default async function RatgeberPage() {
   await bootstrapDatabase();
   const posts = await getPublishedPosts(60);
   return (
-    <section className="mx-auto max-w-site px-4 sm:px-6 py-14">
+    <section className="mx-auto max-w-site px-4 sm:px-6 lg:px-8 xl:px-10 py-14">
       <JsonLd
         data={collectionPageSchema({
           name: "Alle Ratgeber",

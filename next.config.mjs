@@ -6,10 +6,12 @@ const nextConfig = {
     instrumentationHook: true,
     serverComponentsExternalPackages: ["node-cron", "openai", "@prisma/client", "prisma", "sharp"],
   },
+  compress: true,
   images: {
-    remotePatterns: [
-      { protocol: "https", hostname: "images.unsplash.com" },
-    ],
+    formats: ["image/avif", "image/webp"],
+    deviceSizes: [640, 750, 828, 1080, 1200],
+    imageSizes: [96, 160, 256, 384],
+    minimumCacheTTL: 60 * 60 * 24 * 30,
   },
 };
 

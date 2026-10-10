@@ -17,7 +17,7 @@ export default async function SearchPage({
   const posts = q ? await searchPosts(q) : [];
 
   return (
-    <section className="mx-auto max-w-site px-4 sm:px-6 py-14">
+    <section className="mx-auto max-w-site px-4 sm:px-6 lg:px-8 xl:px-10 py-14">
       <h1 className="font-serif text-4xl text-ink">Suche</h1>
       <form className="mt-6 flex gap-3" action="/suchen">
         <input

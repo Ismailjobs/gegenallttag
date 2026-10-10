@@ -11,7 +11,7 @@ export default function Footer() {
 
   return (
     <footer className="mt-20 bg-navy-950 text-white">
-      <div className="mx-auto max-w-site px-4 sm:px-6 py-14">
+      <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-8 xl:px-10 py-14">
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-1">
             <Logo inverted />

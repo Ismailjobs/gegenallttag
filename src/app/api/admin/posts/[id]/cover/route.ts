@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminApi, unauthorized } from "@/lib/admin-api";
 import { generateCoverWebp } from "@/lib/images";
+import { coverPromptFromArticle } from "@/lib/cover-prompt";
 import type { CategorySlug } from "@/lib/site";
 
 export const runtime = "nodejs";
@@ -19,11 +20,18 @@ export async function POST(
   if (!post) return NextResponse.json({ ok: false }, { status: 404 });
 
   try {
+    const visualPrompt = await coverPromptFromArticle({
+      title: post.title,
+      subtitle: post.subtitle,
+      html: post.content,
+      categorySlug: post.category.slug as CategorySlug,
+    });
     const cover = await generateCoverWebp({
       title: post.title,
       subtitle: post.subtitle,
       categorySlug: post.category.slug as CategorySlug,
       slug: post.slug,
+      coverPrompt: visualPrompt,
     });
     if (!cover) {
       return NextResponse.json(

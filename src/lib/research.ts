@@ -1,6 +1,6 @@
-import { getCategory, OFFICIAL_SOURCES, RESEARCH_SOURCES, type CategorySlug } from "./site";
+import { OFFICIAL_TOPIC_URLS, type CategorySlug } from "./site";
 
-const TIMEOUT_MS = 9000;
+const TIMEOUT_MS = 8000;
 
 export async function researchTopic(params: {
   title: string;
@@ -17,12 +17,12 @@ export async function researchTopic(params: {
     console.error("[research] OpenAI-Suche", error);
     return "";
   });
-  if (web) parts.push(`Live-Recherche:\n${web}`);
+  if (web) parts.push(`Behörden-Recherche:\n${web}`);
 
-  const pages = await fetchReferencePages(params.categorySlug).catch(() => "");
-  if (pages) parts.push(`Quellenausschnitte:\n${pages}`);
+  const pages = await fetchOfficialPages(params.categorySlug).catch(() => "");
+  if (pages) parts.push(`Amtliche Ausschnitte:\n${pages}`);
 
-  return parts.join("\n\n").slice(0, 7000) || "Keine Webrecherche verfügbar.";
+  return parts.join("\n\n").slice(0, 2400) || "Keine Webrecherche verfügbar.";
 }
 
 async function openaiWebSearch(params: {
@@ -35,12 +35,11 @@ async function openaiWebSearch(params: {
   if (!key) return "";
 
   const extra = params.editorPrompt?.trim()
-    ? `Redaktionswunsch: ${params.editorPrompt.trim()}`
-    : "Kurz prüfen, was Ratgeber und Behörden zu dem Thema in Österreich schreiben.";
+    ? `Briefing: ${params.editorPrompt.trim().slice(0, 280)}`
+    : "";
 
-  const query = `Österreich ${params.categorySlug} ${params.clusterKeyword || ""} ${params.title || ""}. ${extra}
-Suche aktuelle, sachliche Hinweise (Behörden, MA 48/46, Mistplatz, Halteverbot, Kostenrahmen).
-Nenne 4–8 knappe Fakten mit Quelle (Domain). Keine abgeschriebenen Werbetexte, keine erfundenen Preise.`;
+  const query = `site:wien.gv.at OR site:oesterreich.gv.at ${params.categorySlug} ${params.clusterKeyword || ""} ${extra}
+Nur Fakten von Stadt Wien / Bund (MA 48, MA 46, Mistplatz, Halteverbot, Ummeldung). 5 kurze Punkte mit Domain. Keine Firmenwerbung, keine erfundenen Preise.`;
 
   const body = {
     model: process.env.OPENAI_RESEARCH_MODEL || "gpt-4o-mini",
@@ -55,7 +54,7 @@ Nenne 4–8 knappe Fakten mit Quelle (Domain). Keine abgeschriebenen Werbetexte,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
-    signal: AbortSignal.timeout(TIMEOUT_MS + 12000),
+    signal: AbortSignal.timeout(TIMEOUT_MS + 10000),
   });
 
   if (!res.ok) {
@@ -69,7 +68,7 @@ Nenne 4–8 knappe Fakten mit Quelle (Domain). Keine abgeschriebenen Werbetexte,
         ...body,
         tools: [{ type: "web_search_preview" }],
       }),
-      signal: AbortSignal.timeout(TIMEOUT_MS + 12000),
+      signal: AbortSignal.timeout(TIMEOUT_MS + 10000),
     });
   }
 
@@ -81,14 +80,14 @@ Nenne 4–8 knappe Fakten mit Quelle (Domain). Keine abgeschriebenen Werbetexte,
     output_text?: string;
     output?: { content?: { text?: string }[] }[];
   };
-  if (json.output_text) return json.output_text.slice(0, 4500);
+  if (json.output_text) return json.output_text.slice(0, 1800);
   const texts =
     json.output
       ?.flatMap((item) => item.content || [])
       .map((c) => c.text)
       .filter(Boolean)
       .join("\n") || "";
-  return texts.slice(0, 4500);
+  return texts.slice(0, 1800);
 }
 
 async function searchPreviewChat(key: string, query: string) {
@@ -100,38 +99,35 @@ async function searchPreviewChat(key: string, query: string) {
     },
     body: JSON.stringify({
       model: "gpt-4o-mini-search-preview",
+      max_tokens: 320,
       messages: [
         {
           role: "system",
           content:
-            "Du recherchierst für einen österreichischen Ratgeber. Liefere knappe Fakten mit Quellen-Domains.",
+            "Kurze Behörden-Fakten für Österreich, mit Domain. Keine Werbetexte.",
         },
         { role: "user", content: query },
       ],
     }),
-    signal: AbortSignal.timeout(TIMEOUT_MS + 12000),
+    signal: AbortSignal.timeout(TIMEOUT_MS + 10000),
   });
   if (!res.ok) return "";
   const json = (await res.json()) as {
     choices?: { message?: { content?: string } }[];
   };
-  return json.choices?.[0]?.message?.content?.slice(0, 4500) || "";
+  return json.choices?.[0]?.message?.content?.slice(0, 1800) || "";
 }
 
-async function fetchReferencePages(categorySlug: CategorySlug) {
-  const category = getCategory(categorySlug);
-  const urls = [
-    ...OFFICIAL_SOURCES.slice(0, 3).map((s) => s.url),
-    ...RESEARCH_SOURCES.map((s) => s.url),
-    category?.pbnUrl,
-  ].filter(Boolean) as string[];
-
-    const snippets = await Promise.all(
-    urls.slice(0, 6).map(async (url) => {
+async function fetchOfficialPages(categorySlug: CategorySlug) {
+  const urls = OFFICIAL_TOPIC_URLS[categorySlug] || [];
+  const snippets = await Promise.all(
+    urls.slice(0, 3).map(async (url) => {
       try {
         const res = await fetch(url, {
           signal: AbortSignal.timeout(TIMEOUT_MS),
-          headers: { "User-Agent": "GegenAlltagBot/1.0 (+https://gegenalltag.at)" },
+          headers: {
+            "User-Agent": "GegenAlltagBot/1.0 (+https://gegenalltag.at)",
+          },
         });
         if (!res.ok) return "";
         const html = await res.text();
@@ -141,7 +137,7 @@ async function fetchReferencePages(categorySlug: CategorySlug) {
           .replace(/<[^>]+>/g, " ")
           .replace(/\s+/g, " ")
           .trim()
-          .slice(0, 900);
+          .slice(0, 520);
         return text ? `${url}: ${text}` : "";
       } catch {
         return "";

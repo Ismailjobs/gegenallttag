@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { CalendarDays, Clock } from "lucide-react";
 import { formatDate, readingLabel } from "@/lib/utils";
+import { resolveCover } from "@/lib/cover";
+import CoverImage from "./CoverImage";
 
 export type ArticleCardPost = {
   slug: string;
@@ -15,20 +17,18 @@ export type ArticleCardPost = {
 
 export default function ArticleCard({ post }: { post: ArticleCardPost }) {
   const href = `/${post.category.slug}/${post.slug}`;
-  const image =
-    post.coverImage ||
-    "https://images.unsplash.com/photo-1484154217615-ce022b968b41?auto=format&fit=crop&w=1200&q=80";
+  const image = resolveCover(post.coverImage, post.category.slug);
 
   return (
     <article className="group flex h-full flex-col">
-      <Link href={href} className="relative block overflow-hidden rounded-2xl">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
+      <Link href={href} className="relative block overflow-hidden rounded-2xl aspect-[16/10] bg-navy-50">
+        <CoverImage
           src={image}
           alt=""
-          className="h-52 w-full object-cover transition duration-500 group-hover:scale-[1.04]"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+          className="object-cover transition duration-500 group-hover:scale-[1.04]"
         />
-        <span className="absolute left-3 bottom-3 rounded-md bg-white/95 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-navy-700">
+        <span className="absolute left-3 bottom-3 z-10 rounded-md bg-white/95 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-navy-700">
           {post.category.name}
         </span>
       </Link>

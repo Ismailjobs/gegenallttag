@@ -11,18 +11,24 @@ const newsreader = Newsreader({
   subsets: ["latin"],
   variable: "--font-newsreader",
   display: "swap",
+  preload: true,
+  adjustFontFallback: true,
 });
 
 const sourceSans = Source_Sans_3({
   subsets: ["latin"],
   variable: "--font-source-sans",
   display: "swap",
+  preload: true,
+  adjustFontFallback: true,
 });
 
 const caveat = Caveat({
   subsets: ["latin"],
   variable: "--font-caveat",
-  display: "swap",
+  display: "optional",
+  preload: false,
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {

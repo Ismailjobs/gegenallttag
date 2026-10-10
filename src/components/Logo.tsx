@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { SITE } from "@/lib/site";
 
@@ -10,32 +11,19 @@ export default function Logo({
 }) {
   const title = inverted ? "text-white" : "text-ink";
   const sub = inverted ? "text-white/70" : "text-navy-600";
+  const height = compact ? 28 : 36;
+  const width = Math.round(height * (1600 / 723));
 
   return (
-    <Link href="/" className="flex items-center gap-3 group">
-      <svg
-        width={compact ? 36 : 42}
-        height={compact ? 28 : 32}
-        viewBox="0 0 64 48"
-        fill="none"
-        aria-hidden
-      >
-        <path
-          d="M4 36 L18 16 L28 28 L40 10 L60 36"
-          stroke={inverted ? "#93C5FD" : "#1E6BB8"}
-          strokeWidth="3.2"
-          strokeLinejoin="round"
-          fill="none"
-        />
-        <path
-          d="M10 36 L22 22 L32 32 L44 16 L58 36"
-          stroke={inverted ? "#E8F1FB" : "#0E2744"}
-          strokeWidth="2.4"
-          strokeLinejoin="round"
-          fill="none"
-        />
-        <path d="M2 38 H62" stroke={inverted ? "#64748B" : "#0E2744"} strokeWidth="2" />
-      </svg>
+    <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group">
+      <Image
+        src="/images/logo.png"
+        alt={SITE.name}
+        width={width}
+        height={height}
+        className="h-7 w-auto sm:h-9"
+        priority={!inverted && !compact}
+      />
       <span className="leading-tight">
         <span className={`block font-serif text-[22px] font-semibold tracking-tight ${title}`}>
           {SITE.name}

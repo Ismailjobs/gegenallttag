@@ -3,45 +3,88 @@ import type { FaqItem } from "./utils";
 import { parseJson, stripHtml } from "./utils";
 
 export async function uniquenessHints(categorySlug: string) {
-  const posts = await prisma.post.findMany({
-    where: {
-      status: { in: ["PUBLISHED", "SCHEDULED"] },
-      category: { slug: categorySlug },
-    },
-    orderBy: { createdAt: "desc" },
-    take: 14,
-    select: { title: true, subtitle: true, content: true, faqJson: true },
-  });
+  const [sameCat, recent] = await Promise.all([
+    prisma.post.findMany({
+      where: {
+        status: { in: ["PUBLISHED", "SCHEDULED"] },
+        category: { slug: categorySlug },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 10,
+      select: {
+        title: true,
+        content: true,
+        faqJson: true,
+        schemaJson: true,
+        metaDesc: true,
+      },
+    }),
+    prisma.post.findMany({
+      where: { status: { in: ["PUBLISHED", "SCHEDULED"] } },
+      orderBy: { createdAt: "desc" },
+      take: 18,
+      select: { title: true, schemaJson: true },
+    }),
+  ]);
 
-  const openings: string[] = [];
+  if (!sameCat.length) {
+    return "Noch keine Vergleichstexte in dieser Kategorie.";
+  }
+
+  const titles = sameCat.map((p) => `- ${p.title}`);
+  const openings = sameCat
+    .map((p) => {
+      const first = stripHtml(p.content || "").slice(0, 220);
+      return first ? `- ${p.title}: „${first}“` : "";
+    })
+    .filter(Boolean);
+
   const faqQuestions: string[] = [];
-  const titles: string[] = [];
-
-  for (const post of posts) {
-    titles.push(`- ${post.title}`);
-    const text = stripHtml(post.content || "");
-    const first = text.slice(0, 420);
-    if (first) openings.push(`- ${post.title}: „${first}“`);
+  for (const post of sameCat) {
     const faqs = parseJson<FaqItem[]>(post.faqJson, []);
-    for (const faq of faqs.slice(0, 4)) {
+    for (const faq of faqs.slice(0, 2)) {
       const q = faq.question || (faq as { q?: string }).q;
       if (q) faqQuestions.push(`- ${q}`);
     }
   }
 
-  if (!openings.length) {
-    return "Noch keine Vergleichstexte in dieser Kategorie.";
+  const keywordCounts = new Map<string, number>();
+  for (const post of recent) {
+    const extras = parseJson<{ keywords?: string[] }>(post.schemaJson, {});
+    const fromTitle = post.title
+      .toLowerCase()
+      .split(/[^a-zäöüß0-9]+/i)
+      .filter((w) => w.length > 4);
+    for (const kw of extras.keywords || []) {
+      bump(keywordCounts, kw);
+    }
+    for (const w of fromTitle.slice(0, 6)) bump(keywordCounts, w);
   }
 
-  return `Bestehende Texte derselben Kategorie – Formulierungen, Satzbau, Einstiege und FAQ-Fragen nicht nachahmen. Keine Satzschablonen, keine umgestellten Klone.
-Titel:
+  const occupied = [...keywordCounts.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 16)
+    .map(([k, n]) => `- ${k} (${n}×)`)
+    .join("\n");
+
+  return `Bestehende Texte – nicht klonen. Wähle eine Nische, die unten NICHT als Titel vorkommt (Bezirk, Objekttyp, Behörde, Randfall). Keine Head-Terms als Titel.
+Titel derselben Kategorie:
 ${titles.join("\n")}
 
 Einstiege:
 ${openings.join("\n")}
 
-Bereits verwendete FAQ-Fragen:
-${faqQuestions.slice(0, 24).join("\n") || "- (keine)"}`;
+FAQ-Fragen nicht wiederholen:
+${faqQuestions.slice(0, 16).join("\n") || "- (keine)"}
+
+Bereits belegte Keywords (nicht als Hauptcluster, nicht im Titel stapeln):
+${occupied || "- (keine)"}`;
+}
+
+function bump(map: Map<string, number>, raw: string) {
+  const key = raw.trim().toLowerCase();
+  if (key.length < 4) return;
+  map.set(key, (map.get(key) || 0) + 1);
 }
 
 export function openingsTooSimilar(introHtml: string, uniquenessBlock: string) {

@@ -4,8 +4,10 @@ import { buildLinkPlan } from "./linking";
 import { getCategory, type CategorySlug } from "./site";
 import { slugify, uniqueSlug, type GeneratedArticle } from "./utils";
 import { generateCoverWebp } from "./images";
+import { coverPromptFromArticle } from "./cover-prompt";
 import { researchTopic } from "./research";
 import { openingsTooSimilar, uniquenessHints } from "./uniqueness";
+import { stripHtml } from "./utils";
 
 const MODEL = "gpt-4o-mini";
 
@@ -62,12 +64,19 @@ export async function generateArticleFromTopic(topicId: string) {
     const scheduledFor = nextSlot();
     let coverImage = coverFor(topic.categorySlug as CategorySlug);
     try {
+      const visualPrompt = await coverPromptFromArticle({
+        title: article.title,
+        subtitle: article.subtitle,
+        html,
+        headings: article.sections.map((s) => s.heading),
+        categorySlug: topic.categorySlug as CategorySlug,
+      });
       const generatedCover = await generateCoverWebp({
         title: article.title,
         subtitle: article.subtitle,
         categorySlug: topic.categorySlug as CategorySlug,
         slug,
-        coverPrompt: article.cover_prompt,
+        coverPrompt: visualPrompt,
       });
       if (generatedCover) coverImage = generatedCover;
     } catch (error) {
@@ -87,7 +96,7 @@ export async function generateArticleFromTopic(topicId: string) {
         subtitle: article.subtitle,
         metaTitle: `${article.title} | Gegen Alltag`,
         metaDesc: article.meta_desc.slice(0, 160),
-        readingTime: article.reading_time || 6,
+        readingTime: readingMinutes(html),
         categoryId: cat.id,
         content: html,
         tableJson: JSON.stringify(article.cost_table || []),
@@ -216,6 +225,9 @@ ${relatedBlock}
 - Keine erfundenen Preise als Garantie; Spannen als Orientierung, Stand Wien/NÖ.
 - FAQ ist Pflicht: genau 5 oder 6 Fragen, jeweils eine vollständige Frage und eine belastbare Antwort. Keine Wiederholung der H2-Überschriften.
 - Titel selbst formulieren: präzise, ohne Clickbait, österreichisch, Keyword natürlich eingebettet.
+- Fließtext (intro + sections, ohne Tabelle/Checkliste/FAQ) circa 1000 Wörter (950–1100). Kein Fülltext: konkrete Abläufe, Zahlen als Spanne, Behörden.
+- cluster_keyword und Titel-Keywords dürfen nicht die belegten Keywords als Hauptsignal wiederholen; verwandtes Silo-Thema, anderer Winkel.
+- Nische ist Pflicht. Kein generischer Titel wie „Entrümpelung Wien“ oder „Umzug Tipps“. Ein enger Long-Tail: Bezirk (Favoriten, Ottakring, Wiener Neustadt, St. Pölten), Objekt (Kellerabteil, Dachboden, Gemeindebau ohne Lift, Reihenhaus), Behörde (Mistplatz-Annahme, MA-46-Frist), Rechtslage (Verlassenschaft vor dem ersten Karton) oder Randfall (enge Hofeinfahrt, Altsperrgut). H2 beantworten echte Suchfragen, nicht Synonyme desselben Keywords. Suchintention informational.
 
 Antworte ausschließlich als JSON-Objekt mit exakt diesen Schlüsseln:
 {
@@ -237,7 +249,6 @@ Antworte ausschließlich als JSON-Objekt mit exakt diesen Schlüsseln:
   "faqs": [
     { "q": "Frage als ganze Frage", "a": "kurze, belastbare Antwort" }
   ],
-  "cover_prompt": "English visual prompt for a cinematic editorial photo, 40–70 words, Wiener/NÖ architecture, no text no logos, luxurious documentary lighting",
   "schema": {
     "keywords": ["3–8 deutschsprachige Keywords"],
     "about": "kurzer Gegenstand des Beitrags",
@@ -245,7 +256,7 @@ Antworte ausschließlich als JSON-Objekt mit exakt diesen Schlüsseln:
   }
 }
 
-4–6 sections, 3–5 cost_table Zeilen, 5–7 checklist Punkte, 5–6 FAQs. schema.keywords, schema.about und cover_prompt sind Pflicht.`;
+4–6 sections, 3–5 cost_table Zeilen, 5–7 checklist Punkte, 5–6 FAQs. Circa 1000 Wörter Fließtext. schema.keywords und schema.about sind Pflicht.`;
 
   const openai = client();
   const completion = await openai.chat.completions.create({
@@ -256,7 +267,7 @@ Antworte ausschließlich als JSON-Objekt mit exakt diesen Schlüsseln:
       {
         role: "system",
         content:
-          "Du bist Redakteurin in Wien. Du schreibst nur amtliches österreichisches Deutsch. Briefings auf Türkisch übersetzt du still. Du lieferst nur valides JSON mit Titel, Pflicht-FAQ, schema und cover_prompt.",
+          "Du bist Redakteurin in Wien. Amtliches österreichisches Deutsch. Briefings auf Türkisch übersetzt du still. JSON mit Titel, ~1000 Wörtern Fließtext, Pflicht-FAQ und schema. Kein Bildprompt.",
       },
       { role: "user", content: prompt },
     ],
@@ -279,7 +290,6 @@ function validateArticle(parsed: GeneratedArticle): GeneratedArticle {
   parsed.faqs = faqs.slice(0, 6);
   parsed.cluster_keyword =
     parsed.cluster_keyword?.trim() || parsed.schema?.keywords?.[0] || parsed.title;
-  parsed.cover_prompt = parsed.cover_prompt?.trim() || "";
   parsed.schema = {
     keywords: (parsed.schema?.keywords || [])
       .map((k) => String(k).trim())
@@ -318,6 +328,11 @@ export function renderArticleHtml(
   return html;
 }
 
+function readingMinutes(html: string) {
+  const words = stripHtml(html).split(/\s+/).filter(Boolean).length;
+  return Math.max(6, Math.min(12, Math.round(words / 140)));
+}
+
 function nextSlot() {
   const now = new Date();
   const slot = new Date(now);
@@ -328,9 +343,9 @@ function nextSlot() {
 
 function coverFor(slug: CategorySlug) {
   const map: Record<CategorySlug, string> = {
-    entruempelung: "/images/boxes.jpg",
-    raeumung: "/images/house.jpg",
-    umzug: "/images/checklist.jpg",
+    entruempelung: "/images/boxes.webp",
+    raeumung: "/images/house.webp",
+    umzug: "/images/checklist.webp",
   };
   return map[slug];
 }

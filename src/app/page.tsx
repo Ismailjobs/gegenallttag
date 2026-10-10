@@ -14,8 +14,8 @@ export default async function HomePage() {
   return (
     <>
       <Hero />
-      <section className="bg-white pt-10 pb-16">
-        <div className="mx-auto max-w-site px-4 sm:px-6">
+      <section className="bg-white pt-8 pb-16">
+        <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-8 xl:px-10">
           <div className="flex items-end justify-between gap-4 mb-8">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-navy-400">

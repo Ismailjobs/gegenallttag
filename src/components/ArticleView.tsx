@@ -6,6 +6,8 @@ import ArticleCard from "./ArticleCard";
 import JsonLd from "./JsonLd";
 import { blogPostingSchema, faqPageSchema } from "@/lib/jsonld";
 import { SITE } from "@/lib/site";
+import { resolveCover } from "@/lib/cover";
+import CoverImage from "./CoverImage";
 import type { Post, Category } from "@prisma/client";
 
 type PostWithCategory = Post & { category: Category };
@@ -78,12 +80,15 @@ export default function ArticleView({
       </header>
       {post.coverImage && (
         <div className="mx-auto max-w-4xl px-4 sm:px-6 mt-8">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={post.coverImage}
-            alt=""
-            className="w-full h-[380px] sm:h-[460px] object-cover rounded-3xl shadow-lg shadow-navy-900/10"
-          />
+          <div className="relative aspect-[16/10] overflow-hidden rounded-3xl bg-navy-50 shadow-lg shadow-navy-900/10">
+            <CoverImage
+              src={resolveCover(post.coverImage, post.category.slug)}
+              alt=""
+              priority
+              sizes="(max-width: 896px) 100vw, 896px"
+              className="object-cover"
+            />
+          </div>
         </div>
       )}
       <div className="mx-auto max-w-3xl px-4 sm:px-6 py-10">
@@ -97,7 +102,7 @@ export default function ArticleView({
       </div>
       {related.length > 0 && (
         <section className="border-t border-navy-100 bg-navy-50/40">
-          <div className="mx-auto max-w-site px-4 sm:px-6 py-14">
+          <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-8 xl:px-10 py-14">
             <h2 className="font-serif text-3xl text-ink mb-8">Weiterlesen in {post.category.name}</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {related.map((item) => (

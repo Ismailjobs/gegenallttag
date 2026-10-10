@@ -25,7 +25,7 @@ export default function CategoryView({
         })}
       />
       <section className="bg-navy-50/70 border-b border-navy-100">
-        <div className="mx-auto max-w-site px-4 sm:px-6 py-14">
+        <div className="mx-auto max-w-site px-4 sm:px-6 lg:px-8 xl:px-10 py-14">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent">
             Ratgeber
           </p>
@@ -43,7 +43,7 @@ export default function CategoryView({
           </div>
         </div>
       </section>
-      <section className="mx-auto max-w-site px-4 sm:px-6 py-14">
+      <section className="mx-auto max-w-site px-4 sm:px-6 lg:px-8 xl:px-10 py-14">
         <div className="flex items-end justify-between gap-4 mb-8">
           <h2 className="font-serif text-3xl text-ink">Beiträge aus der Praxis</h2>
           <Link href="/ratgeber" className="text-sm text-accent inline-flex items-center gap-1">

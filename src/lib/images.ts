@@ -4,8 +4,8 @@ import sharp from "sharp";
 import OpenAI from "openai";
 import type { CategorySlug } from "./site";
 
-const MIN_BYTES = 70 * 1024;
-const MAX_BYTES = 180 * 1024;
+const MIN_BYTES = 35 * 1024;
+const MAX_BYTES = 95 * 1024;
 
 export function uploadsDir() {
   return path.join(process.cwd(), "data", "uploads");
@@ -68,8 +68,8 @@ function paramsFor(model: string, prompt: string): OpenAI.Images.ImageGeneratePa
       model,
       prompt,
       n: 1,
-      size: "1536x1024",
-      quality: "high",
+      size: "1024x1024",
+      quality: "low",
     };
   }
   if (model === "dall-e-3") {
@@ -97,11 +97,10 @@ function unique(values: string[]) {
 async function compressToWebp(input: Buffer) {
   const prepared = await sharp(input)
     .rotate()
-    .resize(1600, 1000, { fit: "cover", position: "attention" })
-    .modulate({ saturation: 1.06, brightness: 1.02 })
+    .resize(1100, 688, { fit: "cover", position: "attention" })
     .toBuffer();
 
-  let quality = 78;
+  let quality = 68;
   let out = await sharp(prepared).webp({ quality, effort: 6 }).toBuffer();
 
   while (out.length > MAX_BYTES && quality > 42) {
@@ -127,19 +126,15 @@ function coverPrompt(params: {
   categorySlug: CategorySlug;
   coverPrompt?: string | null;
 }) {
+  const custom = params.coverPrompt?.trim();
+  if (custom) {
+    return `${custom} Photorealistic editorial photography, no illustration, no logos, no watermarks, no readable text, no faces.`;
+  }
   const scene =
     params.categorySlug === "umzug"
-      ? "A luxury editorial photograph of a Viennese Gründerzeit street at golden hour: a clean white removal van, stacked linen-wrapped furniture, warm sandstone facade, cobblestones, cinematic bokeh, magazine-cover composition."
+      ? "Editorial photograph of a Viennese Gründerzeit street at golden hour: clean van, linen-wrapped furniture, sandstone facade, cobblestones."
       : params.categorySlug === "raeumung"
-        ? "A cinematic still of a newly emptied Austrian Altbau apartment: tall windows, herringbone parquet catching late sun, one elegant cardboard stack, quiet grandeur, Architectural Digest lighting."
-        : "A striking editorial photo of an Entrümpelung courtyard in Wien: Hofeinfahrt, warm brick, carefully stacked cartons, a classic Stiegenhaus glimpse, rich color, shallow depth of field, prestige documentary look.";
-
-  const custom = params.coverPrompt?.trim();
-  const topic = [params.title, params.subtitle].filter(Boolean).join(" — ");
-
-  return [
-    custom || scene,
-    `Story: ${topic}.`,
-    "Photorealistic, ultra-detailed, 8k, cinematic color grade, premium magazine cover, no illustration, no collage, no logos, no watermarks, no readable text, no faces in the foreground, elegant and impressive.",
-  ].join(" ");
+        ? "Editorial still of an emptied Austrian Altbau: tall windows, parquet, late sun, one carton stack."
+        : "Editorial photo of a Viennese Hofeinfahrt: stacked cartons, brick, Stiegenhaus, documentary light.";
+  return `${scene} Story: ${params.title}. Photorealistic, no text, no logos, no faces.`;
 }

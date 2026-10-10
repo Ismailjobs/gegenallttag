@@ -101,11 +101,24 @@ export function getCategory(slug: string) {
   return CATEGORIES.find((c) => c.slug === slug);
 }
 
-export const RESEARCH_SOURCES = [
-  { name: "Ratgeber Österreich", url: "https://ratgeber-oesterreich.at" },
-  { name: "Sofortentrümpelung", url: "https://sofortentrumpelung.at" },
-  { name: "Objekträumung", url: "https://objektraeumung.at" },
-] as const;
+/** Nur Behörden – Wettbewerber-Homepages nicht crawlen. */
+export const OFFICIAL_TOPIC_URLS: Record<CategorySlug, string[]> = {
+  entruempelung: [
+    "https://www.wien.gv.at/umwelt/ma48/",
+    "https://www.wien.gv.at/umwelt/ma48/entsorgung/mistplatz/",
+    "https://www.oesterreich.gv.at",
+  ],
+  raeumung: [
+    "https://www.wien.gv.at/umwelt/ma48/",
+    "https://www.oesterreich.gv.at",
+    "https://www.wien.gv.at",
+  ],
+  umzug: [
+    "https://www.wien.gv.at/verkehr/verkehrsorganisation/",
+    "https://www.oesterreich.gv.at",
+    "https://www.wien.gv.at",
+  ],
+};
 
 export const OFFICIAL_SOURCES = [
   {

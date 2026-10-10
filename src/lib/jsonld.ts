@@ -10,7 +10,7 @@ export function organizationSchema() {
     name: SITE.name,
     alternateName: SITE.domain,
     url,
-    logo: `${url}/icon.svg`,
+    logo: `${url}/images/logo.png`,
     description: SITE.claim,
     areaServed: [
       { "@type": "City", name: "Wien" },

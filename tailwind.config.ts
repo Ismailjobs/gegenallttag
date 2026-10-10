@@ -35,7 +35,7 @@ const config: Config = {
         soft: "0 4px 18px rgba(14, 39, 68, 0.06)",
       },
       maxWidth: {
-        site: "1180px",
+        site: "1320px",
       },
     },
   },

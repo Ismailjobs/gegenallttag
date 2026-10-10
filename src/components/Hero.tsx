@@ -1,70 +1,70 @@
 import Link from "next/link";
 import { Heart, ShieldCheck, MapPin, BookOpen } from "lucide-react";
 import { CATEGORIES } from "@/lib/site";
+import CoverImage from "./CoverImage";
+import heroWien from "../../public/images/hero-wien.webp";
 
 export default function Hero() {
   return (
-    <section className="relative overflow-hidden bg-white">
-      <div className="mx-auto max-w-site px-4 sm:px-6 pt-10 lg:pt-14">
-        <div className="grid lg:grid-cols-[1.05fr_1fr] gap-8 items-start">
-          <div className="pt-2 lg:pt-8">
-            <h1 className="font-serif text-[40px] sm:text-[52px] leading-[1.12] text-ink font-medium max-w-xl">
-              Ihr Ratgeber für Entrümpelung, Räumung und Umzug in Österreich
-            </h1>
-            <p className="mt-5 max-w-lg text-lg leading-8 text-slate-600">
-              Praktische Tipps, regionale Informationen und Expertenwissen –
-              für weniger Aufwand und einen guten Neuanfang.
-            </p>
+    <section className="bg-white">
+      <div className="mx-auto max-w-site px-0 sm:px-6 lg:px-8 xl:px-10 pb-2">
+        <div className="relative isolate overflow-hidden rounded-none sm:rounded-b-[28px] min-h-[560px] lg:min-h-[700px] flex flex-col">
+          <div className="absolute inset-0">
+            <CoverImage
+              src={heroWien}
+              alt="Wien, Blick über die Stadt zum Stephansdom"
+              priority
+              sizes="(max-width: 1320px) 100vw, 1320px"
+              className="object-cover object-[center_right] scale-[1.08] origin-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-white from-[0%] via-white/80 via-[38%] to-transparent to-[72%]" />
+            <div className="absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-t from-white via-white/50 to-transparent" />
+            <div className="absolute -right-16 -bottom-24 h-[75%] w-[62%] bg-[radial-gradient(ellipse_at_bottom_right,rgba(255,255,255,0.88)_0%,rgba(255,255,255,0.4)_38%,transparent_72%)]" />
           </div>
-          <div className="relative">
-            <div className="relative overflow-hidden rounded-[28px] min-h-[360px] lg:min-h-[420px] bg-navy-100">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/hero-wien.jpg"
-                alt="Wien, Blick über die Stadt zum Stephansdom"
-                className="absolute inset-0 h-full w-full object-cover object-[center_35%]"
-              />
-              <div className="absolute inset-0 bg-gradient-to-tr from-navy-950/10 via-transparent to-transparent" />
-              <p className="absolute left-8 top-7 font-script text-[36px] leading-[0.95] text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]">
-                Für ein
-                <br />
-                aufgeräumtes Morgen.
-              </p>
-              <div className="absolute right-5 bottom-5 flex items-center gap-2 rounded-full bg-white/90 px-3 py-1.5 text-sm text-navy-800 shadow-soft">
-                <Heart className="h-4 w-4 text-accent fill-accent/20" />
-                Österreich lebt weiter.
-              </div>
-            </div>
-          </div>
+
+          <div className="relative z-10 flex flex-col flex-1 px-5 sm:px-8 lg:px-10 pt-10 sm:pt-14 lg:pt-16 pb-8">
+        <p className="pointer-events-none hidden md:block absolute right-[12%] top-10 lg:top-14 font-script text-[34px] lg:text-[42px] leading-[0.95] text-navy-800/90 -rotate-6 drop-shadow-[0_1px_0_rgba(255,255,255,0.8)]">
+          Für ein
+          <br />
+          aufgeräumtes Morgen.
+        </p>
+
+        <div className="max-w-[560px]">
+          <h1 className="font-serif text-[36px] sm:text-[48px] lg:text-[52px] leading-[1.12] text-ink font-medium">
+            Ihr Ratgeber für Entrümpelung, Räumung und Umzug in Österreich
+          </h1>
+          <p className="mt-5 max-w-lg text-base sm:text-lg leading-8 text-slate-600">
+            Praktische Tipps, regionale Informationen und Expertenwissen –
+            für weniger Aufwand und einen guten Neuanfang.
+          </p>
+          <ul className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-sm text-navy-800">
+            <li className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-accent shadow-soft">
+                <ShieldCheck className="h-4 w-4" />
+              </span>
+              Unabhängig und objektiv
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-accent shadow-soft">
+                <MapPin className="h-4 w-4" />
+              </span>
+              Regional für ganz Österreich
+            </li>
+            <li className="flex items-center gap-2">
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-accent shadow-soft">
+                <BookOpen className="h-4 w-4" />
+              </span>
+              Praxisnahe Tipps von Experten
+            </li>
+          </ul>
         </div>
 
-        <ul className="mt-6 flex flex-wrap gap-x-8 gap-y-3 text-sm text-navy-800">
-          <li className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-50 text-accent">
-              <ShieldCheck className="h-4 w-4" />
-            </span>
-            Unabhängig und objektiv
-          </li>
-          <li className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-50 text-accent">
-              <MapPin className="h-4 w-4" />
-            </span>
-            Regional für ganz Österreich
-          </li>
-          <li className="flex items-center gap-2">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy-50 text-accent">
-              <BookOpen className="h-4 w-4" />
-            </span>
-            Praxisnahe Tipps von Experten
-          </li>
-        </ul>
-
-        <div className="relative z-10 grid md:grid-cols-3 gap-4 mt-6 pb-4">
+        <div className="mt-10 lg:mt-auto grid sm:grid-cols-3 gap-3 sm:gap-4">
           {CATEGORIES.map((category) => (
             <Link
               key={category.slug}
               href={category.href}
-              className="group flex items-center gap-4 rounded-2xl border border-navy-100 bg-white px-5 py-5 shadow-card card-lift"
+              className="group flex items-center gap-4 rounded-2xl border border-navy-100/80 bg-white px-5 py-5 shadow-card card-lift"
             >
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#E8F2FB] text-accent">
                 <CategoryGlyph name={category.icon} />
@@ -76,6 +76,13 @@ export default function Hero() {
               <span className="ml-auto text-navy-300 group-hover:text-accent text-2xl">›</span>
             </Link>
           ))}
+        </div>
+
+        <div className="pointer-events-none absolute right-4 sm:right-8 bottom-[9.5rem] sm:bottom-36 z-10 hidden sm:flex items-center gap-2 rounded-full bg-white/92 px-3 py-1.5 text-sm text-navy-800 shadow-soft">
+          <Heart className="h-4 w-4 text-accent fill-accent/20" />
+          Österreich lebt weiter.
+        </div>
+          </div>
         </div>
       </div>
     </section>
