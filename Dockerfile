@@ -20,7 +20,7 @@ RUN mkdir -p /tmp \
   && npm run build
 
 FROM node:20-alpine AS runner
-RUN apk add --no-cache libc6-compat openssl
+RUN apk add --no-cache libc6-compat openssl su-exec
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -45,6 +45,5 @@ RUN chmod +x ./docker-entrypoint.sh \
   && mkdir -p /app/data \
   && chown -R nextjs:nodejs /app/data /app/prisma
 
-USER nextjs
 EXPOSE 3030
 ENTRYPOINT ["./docker-entrypoint.sh"]
