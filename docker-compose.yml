@@ -12,6 +12,7 @@ services:
       PORT: "3030"
       HOSTNAME: "0.0.0.0"
       DATABASE_URL: "file:/app/data/prod.db"
+      SITE_URL: ${SITE_URL:-https://gegenalltag.at}
     volumes:
       - ./data:/app/data
     restart: unless-stopped

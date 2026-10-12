@@ -14,6 +14,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV DATABASE_URL="file:/tmp/build.db"
+ENV SITE_URL="https://gegenalltag.at"
 RUN mkdir -p /tmp \
   && npx prisma generate \
   && npx prisma db push --skip-generate \
@@ -27,6 +28,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3030
 ENV HOSTNAME=0.0.0.0
 ENV DATABASE_URL="file:/app/data/prod.db"
+ENV SITE_URL="https://gegenalltag.at"
 
 RUN addgroup --system --gid 1001 nodejs \
   && adduser --system --uid 1001 nextjs

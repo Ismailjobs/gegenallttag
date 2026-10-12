@@ -1,12 +1,27 @@
+const PRODUCTION_ORIGIN = "https://gegenalltag.at";
+
+export function siteOrigin() {
+  const raw = String(process.env.SITE_URL || "")
+    .trim()
+    .replace(/\/$/, "");
+  const isLocal = !raw || /localhost|127\.0\.0\.1/i.test(raw);
+  if (isLocal && process.env.NODE_ENV === "production") {
+    return PRODUCTION_ORIGIN;
+  }
+  return raw || "http://localhost:3030";
+}
+
 export const SITE = {
   name: "Gegen Alltag",
   domain: "GegenAlltag.at",
   tagline: "Wissen. Planen. Einfacher machen.",
   claim: "Ratgeber für Raum, Ordnung & Neuanfang in Österreich",
   locale: "de-AT",
-  url: process.env.SITE_URL || "http://localhost:3030",
   email: "info@gegenalltag.at",
-} as const;
+  get url() {
+    return siteOrigin();
+  },
+};
 
 export const PUBLISHER = {
   name: "Nuran Duman",
