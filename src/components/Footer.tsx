@@ -63,6 +63,11 @@ export default function Footer() {
                   Datenschutz
                 </Link>
               </li>
+              <li>
+                <a href="/feed.xml" className="text-white/80 hover:text-white">
+                  RSS-Feed
+                </a>
+              </li>
             </ul>
           </div>
           <div>

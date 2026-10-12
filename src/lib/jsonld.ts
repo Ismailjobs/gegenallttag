@@ -65,6 +65,12 @@ export function websiteSchema() {
       target: `${url}/suchen?q={search_term_string}`,
       "query-input": "required name=search_term_string",
     },
+    hasPart: {
+      "@type": "DataFeed",
+      name: `${SITE.name} RSS-Feed`,
+      url: `${url}/feed.xml`,
+      encodingFormat: "application/rss+xml",
+    },
   };
 }
 

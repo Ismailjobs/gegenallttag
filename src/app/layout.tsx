@@ -48,7 +48,12 @@ export const metadata: Metadata = {
     siteName: SITE.name,
   },
   robots: { index: true, follow: true },
-  alternates: { canonical: SITE.url },
+  alternates: {
+    canonical: SITE.url,
+    types: {
+      "application/rss+xml": `${SITE.url.replace(/\/$/, "")}/feed.xml`,
+    },
+  },
 };
 
 export default function RootLayout({

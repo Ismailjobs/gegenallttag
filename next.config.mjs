@@ -7,6 +7,9 @@ const nextConfig = {
     serverComponentsExternalPackages: ["node-cron", "openai", "@prisma/client", "prisma", "sharp"],
   },
   compress: true,
+  async rewrites() {
+    return [{ source: "/rss.xml", destination: "/feed.xml" }];
+  },
   images: {
     formats: ["image/avif", "image/webp"],
     deviceSizes: [640, 750, 828, 1080, 1200],

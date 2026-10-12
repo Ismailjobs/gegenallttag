@@ -21,6 +21,7 @@ export default async function sitemap() {
     "/kontakt",
     "/impressum",
     "/datenschutz",
+    "/feed.xml",
   ].map((path) => ({
     url: `${SITE.url}${path || "/"}`,
     lastModified: new Date(),
