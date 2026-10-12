@@ -38,8 +38,8 @@ async function openaiWebSearch(params: {
     ? `Briefing: ${params.editorPrompt.trim().slice(0, 280)}`
     : "";
 
-  const query = `site:wien.gv.at OR site:oesterreich.gv.at ${params.categorySlug} ${params.clusterKeyword || ""} ${extra}
-Nur Fakten von Stadt Wien / Bund (MA 48, MA 46, Mistplatz, Halteverbot, Ummeldung). 5 kurze Punkte mit Domain. Keine Firmenwerbung, keine erfundenen Preise.`;
+  const query = `site:oesterreich.gv.at OR site:gv.at ${params.categorySlug} ${params.clusterKeyword || ""} ${extra}
+Nur Fakten von Bund, Ländern und Gemeinden in ganz Österreich (oesterreich.gv.at, Landesportale, Gemeinde; Wien/MA nur wenn das Thema Wien ist). 5 kurze Punkte mit Domain. Keine Firmenwerbung, keine erfundenen Preise.`;
 
   const body = {
     model: process.env.OPENAI_RESEARCH_MODEL || "gpt-4o-mini",

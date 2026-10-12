@@ -5,6 +5,18 @@ export const SITE = {
   claim: "Ratgeber für Raum, Ordnung & Neuanfang in Österreich",
   locale: "de-AT",
   url: process.env.SITE_URL || "http://localhost:3030",
+  email: "info@gegenalltag.at",
+} as const;
+
+export const PUBLISHER = {
+  name: "Nuran Duman",
+  streetAddress: "Dr. Karl-Swoboda-Str. 25",
+  postalCode: "2486",
+  addressLocality: "Pottendorf",
+  addressCountry: "AT",
+  telephoneDisplay: "+43660 871 77 20",
+  telephone: "+436608717720",
+  email: SITE.email,
 } as const;
 
 export type CategorySlug = "entruempelung" | "raeumung" | "umzug";
@@ -34,7 +46,7 @@ export const CATEGORIES: CategoryDef[] = [
     name: "Entrümpelung",
     short: "Platz schaffen. Durchatmen. Neu starten.",
     description:
-      "Praxisnahe Orientierung zu Wohnungsentrümpelung, Hausentrümpelung, Messie-Haushalten, Verlassenschaft und Kosten in Wien und Niederösterreich.",
+      "Entrümpelungen sind oft mit viel Arbeit, Stress und manchmal auch persönlichen Erinnerungen verbunden. Wir begleiten Sie zuverlässig und unkompliziert bei Wohnungsentrümpelungen, Hausentrümpelungen, Verlassenschaften und Messie-Haushalten – persönlich, respektvoll und in ganz Österreich.",
     teaser: "Platz schaffen. Durchatmen. Neu starten.",
     href: "/entruempelung",
     icon: "package",
@@ -53,7 +65,7 @@ export const CATEGORIES: CategoryDef[] = [
     name: "Räumung",
     short: "Zuverlässig. Diskret. Mit Plan.",
     description:
-      "Wohnungsräumung, Firmenräumung, Keller, Lager und Zwangsräumung: Ablauf, Rechte und regionale Besonderheiten in Wien und NÖ.",
+      "Räumungen bringen oft viele organisatorische, rechtliche und persönliche Fragen mit sich. Wir bieten Ihnen verständliche und praxisnahe Orientierung zu Wohnungsräumungen, Firmenräumungen, Keller-, Lager- und Zwangsräumungen – zuverlässig, menschlich und in ganz Österreich.",
     teaser: "Zuverlässig. Diskret. Mit Plan.",
     href: "/raeumung",
     icon: "home",
@@ -62,7 +74,7 @@ export const CATEGORIES: CategoryDef[] = [
     subtopics: [
       { slug: "wohnungsraeumung", name: "Wohnungsräumung", hint: "Übergabe, Kaution, Protokoll" },
       { slug: "firmenraeumung", name: "Firmenräumung", hint: "Betriebe, Büros, Fristen" },
-      { slug: "keller", name: "Keller", hint: "Hausordnung, Sperrmüll, MA 48" },
+      { slug: "keller", name: "Keller", hint: "Hausordnung, Sperrmüll, kommunale Entsorgung" },
       { slug: "lager", name: "Lager", hint: "Selfstorage und Betriebsflächen" },
       { slug: "zwangsraeumung", name: "Zwangsräumung", hint: "Exekution, Räumungstermin" },
     ],
@@ -72,7 +84,7 @@ export const CATEGORIES: CategoryDef[] = [
     name: "Umzug",
     short: "Gut organisiert. Sicher am Ziel.",
     description:
-      "Umzug in Wien, Kosten, Übersiedlung, Halteverbotszone und Checklisten – von der Planung bis zur Ummeldung.",
+      "Von der ersten Planung bis zum Einzug: Hier finden Sie hilfreiche Tipps rund um Umzug, Kosten, Organisation, Halteverbotszonen, Checklisten und Ummeldungen – verständlich erklärt für Umzüge in ganz Österreich.",
     teaser: "Gut organisiert. Sicher am Ziel.",
     href: "/umzug",
     icon: "truck",
@@ -81,8 +93,8 @@ export const CATEGORIES: CategoryDef[] = [
     subtopics: [
       { slug: "umzug-wien", name: "Umzug Wien", hint: "Höfe, Stiegen, Parkpickerl" },
       { slug: "kosten", name: "Kosten", hint: "Volumen, Etagen, Distanz" },
-      { slug: "uebersiedlung", name: "Übersiedlung", hint: "Wien, NÖ und Pendelwege" },
-      { slug: "halteverbotszone", name: "Halteverbotszone", hint: "MA 46, Vorlauf, Schilder" },
+      { slug: "uebersiedlung", name: "Übersiedlung", hint: "Bundesländer, Gemeinden, Pendelwege" },
+      { slug: "halteverbotszone", name: "Halteverbotszone", hint: "Gemeinde, Vorlauf, Schilder" },
       { slug: "checkliste", name: "Checkliste", hint: "Ummeldung, Zähler, Schlüssel" },
     ],
   },
@@ -104,19 +116,19 @@ export function getCategory(slug: string) {
 /** Nur Behörden – Wettbewerber-Homepages nicht crawlen. */
 export const OFFICIAL_TOPIC_URLS: Record<CategorySlug, string[]> = {
   entruempelung: [
+    "https://www.oesterreich.gv.at",
     "https://www.wien.gv.at/umwelt/ma48/",
     "https://www.wien.gv.at/umwelt/ma48/entsorgung/mistplatz/",
-    "https://www.oesterreich.gv.at",
   ],
   raeumung: [
-    "https://www.wien.gv.at/umwelt/ma48/",
     "https://www.oesterreich.gv.at",
-    "https://www.wien.gv.at",
+    "https://www.wien.gv.at/umwelt/ma48/",
+    "https://www.justiz.gv.at",
   ],
   umzug: [
-    "https://www.wien.gv.at/verkehr/verkehrsorganisation/",
     "https://www.oesterreich.gv.at",
-    "https://www.wien.gv.at",
+    "https://www.wien.gv.at/verkehr/verkehrsorganisation/",
+    "https://www.help.gv.at",
   ],
 };
 
@@ -124,7 +136,7 @@ export const OFFICIAL_SOURCES = [
   {
     name: "oesterreich.gv.at",
     url: "https://www.oesterreich.gv.at",
-    label: "Unternehmensservice und Lebenslagen des Bundes",
+    label: "Lebenslagen des Bundes für ganz Österreich",
   },
   {
     name: "wien.gv.at",

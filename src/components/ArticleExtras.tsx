@@ -26,7 +26,7 @@ export function CostTable({ rows }: { rows: CostRow[] }) {
         </table>
       </div>
       <p className="mt-3 text-xs text-slate-500">
-        Spannen dienen der Orientierung in Wien und NÖ. Keine Angebote, keine Garantiepreise.
+        Spannen dienen der Orientierung in ganz Österreich und können regional abweichen. Keine Angebote, keine Garantiepreise.
       </p>
     </section>
   );

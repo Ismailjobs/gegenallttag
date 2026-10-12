@@ -16,7 +16,7 @@ export default function Footer() {
           <div className="md:col-span-1">
             <Logo inverted />
             <p className="mt-4 text-sm leading-6 text-white/70">
-              {SITE.claim}. Unabhängige Orientierung für Wien und Niederösterreich.
+              {SITE.claim}. Unabhängige Orientierung für ganz Österreich – von der Stadt bis zur Gemeinde.
             </p>
           </div>
           <div>

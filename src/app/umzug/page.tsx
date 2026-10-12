@@ -1,12 +1,14 @@
 import type { Metadata } from "next";
 import CategoryPage from "@/components/CategoryPageServer";
+import { getCategory } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
+const category = getCategory("umzug")!;
+
 export const metadata: Metadata = {
-  title: "Umzug in Wien und Niederösterreich",
-  description:
-    "Umzug Wien, Kosten, Übersiedlung, Halteverbotszone und Checkliste – unabhängig erklärt.",
+  title: "Umzug in Österreich",
+  description: category.description,
 };
 
 export default function Page() {

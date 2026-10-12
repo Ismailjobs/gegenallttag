@@ -2,10 +2,7 @@ import { prisma } from "./prisma";
 import { CATEGORIES } from "./site";
 
 export async function bootstrapDatabase() {
-  const categoryCount = await prisma.category.count();
-  if (categoryCount === 0) {
-    await seedCategories();
-  }
+  await seedCategories();
 }
 
 export async function seedAll() {

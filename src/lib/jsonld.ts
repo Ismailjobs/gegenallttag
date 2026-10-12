@@ -1,4 +1,4 @@
-import { SITE } from "./site";
+import { PUBLISHER, SITE } from "./site";
 import type { FaqItem } from "./utils";
 
 export function organizationSchema() {
@@ -9,13 +9,42 @@ export function organizationSchema() {
     "@id": `${url}/#organization`,
     name: SITE.name,
     alternateName: SITE.domain,
+    legalName: PUBLISHER.name,
     url,
     logo: `${url}/images/logo.png`,
     description: SITE.claim,
+    email: PUBLISHER.email,
+    telephone: PUBLISHER.telephone,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: PUBLISHER.streetAddress,
+      postalCode: PUBLISHER.postalCode,
+      addressLocality: PUBLISHER.addressLocality,
+      addressCountry: PUBLISHER.addressCountry,
+    },
+    founder: {
+      "@type": "Person",
+      name: PUBLISHER.name,
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "editorial",
+      email: PUBLISHER.email,
+      telephone: PUBLISHER.telephone,
+      availableLanguage: ["de-AT", "de"],
+    },
+    publishingPrinciples: `${url}/impressum`,
     areaServed: [
-      { "@type": "City", name: "Wien" },
-      { "@type": "AdministrativeArea", name: "Niederösterreich" },
       { "@type": "Country", name: "Österreich" },
+      { "@type": "AdministrativeArea", name: "Wien" },
+      { "@type": "AdministrativeArea", name: "Niederösterreich" },
+      { "@type": "AdministrativeArea", name: "Oberösterreich" },
+      { "@type": "AdministrativeArea", name: "Steiermark" },
+      { "@type": "AdministrativeArea", name: "Kärnten" },
+      { "@type": "AdministrativeArea", name: "Salzburg" },
+      { "@type": "AdministrativeArea", name: "Tirol" },
+      { "@type": "AdministrativeArea", name: "Vorarlberg" },
+      { "@type": "AdministrativeArea", name: "Burgenland" },
     ],
     knowsAbout: ["Entrümpelung", "Räumung", "Umzug", "Wohnungsauflösung"],
   };

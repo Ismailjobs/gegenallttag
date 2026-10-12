@@ -14,12 +14,12 @@ export type LinkPlan = {
 
 function officialHint(slug: CategorySlug) {
   if (slug === "umzug") {
-    return "Verweise im Fließtext auf MA 46 (Halteverbot), Wiener Wohnen und oesterreich.gv.at zur Ummeldung. Keine Firmen- oder Dienstleister-Backlinks.";
+    return "Verweise im Fließtext auf oesterreich.gv.at zur Ummeldung; Halteverbot über die zuständige Gemeinde bzw. in Wien MA 46. Keine Firmen- oder Dienstleister-Backlinks.";
   }
   if (slug === "entruempelung") {
-    return "Verweise auf MA 48, Mistplätze der Stadt Wien und oesterreich.gv.at. Dienstleister-Links nur wenn ausdrücklich vorgesehen.";
+    return "Verweise auf oesterreich.gv.at und die kommunale Abfallstelle (Mistplatz, Recyclinghof); in Wien MA 48. Dienstleister-Links nur wenn ausdrücklich vorgesehen.";
   }
-  return "Verweise auf MA 48, wien.gv.at und – bei Exekution – auf die zuständigen Gerichtsseiten. Dienstleister-Links nur wenn ausdrücklich vorgesehen.";
+  return "Verweise auf oesterreich.gv.at, die Gemeinde und – bei Exekution – auf justiz.gv.at. Wien-Behörden nur bei Wien-Themen. Dienstleister-Links nur wenn ausdrücklich vorgesehen.";
 }
 
 export async function buildLinkPlan(params: {
@@ -71,15 +71,15 @@ function containsServiceLink(html: string, host: string | null | undefined) {
 }
 
 function defaultAnchor(slug: CategorySlug) {
-  if (slug === "entruempelung") return "Entrümpelung in Wien";
-  if (slug === "raeumung") return "Objekt räumung in Österreich";
-  return "Umzugshilfe in Wien";
+  if (slug === "entruempelung") return "Entrümpelung in Österreich";
+  if (slug === "raeumung") return "Objekträumung in Österreich";
+  return "Umzugshilfe in Österreich";
 }
 
 function naturalAnchor(title: string, slug: CategorySlug) {
   const compact = title.replace(/\s+[–—-].*$/, "").trim();
   if (compact.length > 12 && compact.length < 70) return compact;
-  if (slug === "entruempelung") return "die Entrümpelung in Wien";
-  if (slug === "raeumung") return "eine Wohnungsräumung in Niederösterreich";
-  return "die Umzug-Checkliste für Wien";
+  if (slug === "entruempelung") return "die Entrümpelung in Österreich";
+  if (slug === "raeumung") return "eine Wohnungsräumung in Österreich";
+  return "die Umzug-Checkliste für Österreich";
 }

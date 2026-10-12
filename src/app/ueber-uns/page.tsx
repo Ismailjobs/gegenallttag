@@ -3,7 +3,7 @@ import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Über uns",
-  description: `Was ${SITE.name} ist – und was nicht. Unabhängiger Ratgeber für Wien und Niederösterreich.`,
+  description: `Was ${SITE.name} ist – und was nicht. Unabhängiger Ratgeber für ganz Österreich.`,
 };
 
 export default function AboutPage() {
@@ -13,24 +13,21 @@ export default function AboutPage() {
       <h1 className="mt-3 font-serif text-4xl sm:text-5xl text-ink">Über uns</h1>
       <div className="mt-8 space-y-5 text-lg leading-8 text-slate-600">
         <p>
-          {SITE.name} ist ein editoryaler Ratgeber für Raum, Ordnung und Neuanfang in Österreich –
-          mit Schwerpunkt Wien und Niederösterreich. Wir erklären Abläufe, Behördenwege und
-          Kostenspannen, ohne ein Räumungsunternehmen zu sein.
+          {SITE.name} ist ein editorieller Ratgeber für Raum, Ordnung und Neuanfang in ganz
+          Österreich. Allgemeine Texte gelten bundesweit – nicht nur für Wien oder die großen
+          Städte. In regionalen Beiträgen nennen wir, was vor Ort zählt: Wiener Bezirke,
+          Landeshauptstädte, Marktgemeinden und Dörfer.
         </p>
         <p>
           Texte entstehen redaktionell und über ein transparentes Themen-Backlog. Wo Dienstleister
-          erwähnt werden, geschieht das sparsam. Amtliche Quellen bleiben{" "}
-          <a className="text-accent underline" href="https://www.wien.gv.at" rel="nofollow">
-            wien.gv.at
-          </a>{" "}
-          und{" "}
+          erwähnt werden, geschieht das sparsam. Amtliche Quellen sind{" "}
           <a className="text-accent underline" href="https://www.oesterreich.gv.at" rel="nofollow">
             oesterreich.gv.at
           </a>
-          .
+          {" "}sowie die zuständigen Landes- und Gemeindeportale.
         </p>
         <p>
-          {SITE.tagline} – das ist der Anspruch: Wissen vor Verkaufsdruck, Plan vor Panik, Region vor
+          {SITE.tagline} – das ist der Anspruch: Wissen vor Verkaufsdruck, Plan vor Panik, Ort vor
           allgemeiner Floskel.
         </p>
       </div>

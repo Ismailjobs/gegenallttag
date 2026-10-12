@@ -196,7 +196,7 @@ async function callModel(params: {
     ? `\nDer erste Entwurf ähnelte bestehenden Texten zu stark. Schreibe Titel, Einstieg, H2-Reihenfolge, Beispiele und FAQ komplett neu. Andere Satzlängen, anderer Einstieg (Szene, Behörde, Fehler, Frist) – keine Umstellung vorhandener Sätze.\n`
     : "";
 
-  const prompt = `Du schreibst für Gegen Alltag (GegenAlltag.at), einen unabhängigen Ratgeber für Wien und Niederösterreich.
+  const prompt = `Du schreibst für Gegen Alltag (GegenAlltag.at), einen unabhängigen Ratgeber für ganz Österreich.
 
 Kategorie: ${params.categoryName} (/${params.categorySlug}/)
 ${titleHint ? `Titel-Hinweis (nur Idee, du darfst und sollst einen besseren österreichischen Titel erfinden): ${titleHint}` : "Kein Titel vorgegeben – du erfindest Titel und Untertitel."}
@@ -206,7 +206,7 @@ ${extra}${rewriteBlock}
 Sprache: amtliches österreichisches Deutsch (de-AT), Sie-Form. Kein Binnendeutsch, kein Dialekt-Kauderwelsch, aber durchgehend österreichische Lexik, wo sie sachlich passt: Jänner (nicht Januar), Stiege/Stiegenhaus (nicht Treppe als Default), Parkpickerl, Mistplatz, Altsperrgut, Sperrmüll, Übersiedlung, Sackerl, heuer, Bezirksvorstehung, Magistrat, Wiener Wohnen, MA 46, MA 48, Verlassenschaft, Ordination, Trafik, Semmel. Kein „Brötchen“, kein „Januar“, kein norddeutscher Behördenton. Kein bayerisches „I hob“, kein „Servas“ im Fließtext.
 Das Briefing darf auf Türkisch sein. Der fertige Text, Titel, FAQ und Schema sind ausschließlich österreichisches Deutsch – nichts Türkisches im veröffentlichten Artikel.
 
-Wien: Das Wort „Wien“ darf vorkommen, wenn Ablauf, Behörde, Bezirk oder Alltag wirklich in Wien spielen. Nicht in jedem Absatz, nicht als Keyword-Stuffing. Niederösterreich ohne Wien-Zwang.
+Reichweite: Allgemeine Sätze gelten für ganz Österreich – Bund, alle Bundesländer, Städte, Marktgemeinden und Dörfer. Nicht auf Großstädte verengen. Lokale Namen dort, wo sie den Ablauf wirklich ändern: Wien und Bezirke (z. B. 3. Bezirk/Landstraße), Graz, Linz, Salzburg, Innsbruck, Klagenfurt, St. Pölten, Wiener Neustadt, Steyr, Villach, Wels, Leoben, Amstetten sowie Bezirke und Gemeinden (Hartberg, Lienz, Zell am See, Gmunden, Deutschlandsberg). Beispiele: „In Wien ist Folgendes zu beachten“, „im 3. Wiener Gemeindebezirk“, „in der Steiermark“, „in einer Marktgemeinde in Oberösterreich“. Wien, MA 46/48, Parkpickerl, Wiener Wohnen nur wenn der Beitrag wirklich Wien betrifft – kein Keyword-Stuffing, kein Wien-Zwang.
 
 Verboten: Floskeln wie „Beim Thema X geht es darum…“, „In der heutigen Zeit…“, „Immer mehr Menschen…“, „Weiterführend lohnt der Blick…“, SEO-Spam, Du-Anrede im Marketington. Neutral, konkret, praxisnah.
 Jeder Text braucht einen eigenen Einstieg, eigene Beispiele, eigene FAQ-Fragen. Keine Satzklone.
@@ -221,13 +221,13 @@ Pflicht:
 - Mindestens zwei natürliche interne Links im Fließtext (nicht als Liste):
 ${relatedBlock}
 - Quellen: ${serviceBlock}
-- Offizielle Links nur zu oesterreich.gv.at, wien.gv.at, MA 48 oder MA 46, sofern erwähnt.
-- Keine erfundenen Preise als Garantie; Spannen als Orientierung, Stand Wien/NÖ.
+- Offizielle Links: oesterreich.gv.at und das zuständige Landes- oder Gemeindeportal. Wien.gv.at, MA 48 oder MA 46 nur bei Wien-Themen.
+- Keine erfundenen Preise als Garantie; Spannen als Orientierung für Österreich, regional abweichend.
 - FAQ ist Pflicht: genau 5 oder 6 Fragen, jeweils eine vollständige Frage und eine belastbare Antwort. Keine Wiederholung der H2-Überschriften.
 - Titel selbst formulieren: präzise, ohne Clickbait, österreichisch, Keyword natürlich eingebettet.
 - Fließtext (intro + sections, ohne Tabelle/Checkliste/FAQ) circa 1000 Wörter (950–1100). Kein Fülltext: konkrete Abläufe, Zahlen als Spanne, Behörden.
 - cluster_keyword und Titel-Keywords dürfen nicht die belegten Keywords als Hauptsignal wiederholen; verwandtes Silo-Thema, anderer Winkel.
-- Nische ist Pflicht. Kein generischer Titel wie „Entrümpelung Wien“ oder „Umzug Tipps“. Ein enger Long-Tail: Bezirk (Favoriten, Ottakring, Wiener Neustadt, St. Pölten), Objekt (Kellerabteil, Dachboden, Gemeindebau ohne Lift, Reihenhaus), Behörde (Mistplatz-Annahme, MA-46-Frist), Rechtslage (Verlassenschaft vor dem ersten Karton) oder Randfall (enge Hofeinfahrt, Altsperrgut). H2 beantworten echte Suchfragen, nicht Synonyme desselben Keywords. Suchintention informational.
+- Nische ist Pflicht. Kein generischer Titel wie „Entrümpelung Wien“ oder „Umzug Tipps“. Ein enger Long-Tail: Ort (Wien-Favoriten, Graz-Lend, 3. Bezirk, Steyr, Lienz, Marktgemeinde in der Steiermark), Objekt (Kellerabteil, Dachboden, Gemeindebau ohne Lift, Reihenhaus, Bauernhof), Behörde (Mistplatz, Gemeindeamt, Bezirkshauptmannschaft, MA-46-Frist in Wien), Rechtslage (Verlassenschaft vor dem ersten Karton) oder Randfall (enge Hofeinfahrt, Altsperrgut). H2 beantworten echte Suchfragen, nicht Synonyme desselben Keywords. Suchintention informational.
 
 Antworte ausschließlich als JSON-Objekt mit exakt diesen Schlüsseln:
 {
@@ -267,7 +267,7 @@ Antworte ausschließlich als JSON-Objekt mit exakt diesen Schlüsseln:
       {
         role: "system",
         content:
-          "Du bist Redakteurin in Wien. Amtliches österreichisches Deutsch. Briefings auf Türkisch übersetzt du still. JSON mit Titel, ~1000 Wörtern Fließtext, Pflicht-FAQ und schema. Kein Bildprompt.",
+          "Du bist Redakteurin in Österreich. Amtliches österreichisches Deutsch. Allgemeine Texte für ganz Österreich, lokale Details nur wo sie stimmen. Briefings auf Türkisch übersetzt du still. JSON mit Titel, ~1000 Wörtern Fließtext, Pflicht-FAQ und schema. Kein Bildprompt.",
       },
       { role: "user", content: prompt },
     ],

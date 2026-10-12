@@ -11,7 +11,7 @@ export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Alle Ratgeber",
-  description: "Alle Beiträge zu Entrümpelung, Räumung und Umzug in Wien und Niederösterreich.",
+  description: "Alle Beiträge zu Entrümpelung, Räumung und Umzug in ganz Österreich.",
 };
 
 export default async function RatgeberPage() {

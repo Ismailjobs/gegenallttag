@@ -38,11 +38,11 @@ export const metadata: Metadata = {
     template: `%s | ${SITE.name}`,
   },
   description:
-    "Unabhängiger Ratgeber für Entrümpelung, Räumung und Umzug in Wien und Niederösterreich. Praxis, Kosten, Behörden – ohne Vertriebsdruck.",
+    "Unabhängiger Ratgeber für Entrümpelung, Räumung und Umzug in ganz Österreich. Praxis, Kosten, Behörden – von der Stadt bis zur Gemeinde.",
   openGraph: {
     title: `${SITE.name} – ${SITE.claim}`,
     description:
-      "Praktische Tipps, regionale Informationen und Expertenwissen für Wien und Niederösterreich.",
+      "Praktische Tipps, regionale Informationen und Expertenwissen für ganz Österreich – nicht nur für die großen Städte.",
     locale: "de_AT",
     type: "website",
     siteName: SITE.name,

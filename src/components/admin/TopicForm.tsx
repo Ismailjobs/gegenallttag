@@ -102,7 +102,7 @@ export default function TopicForm() {
         <input
           name="targetAnchor"
           className="mt-1 w-full rounded-xl border border-navy-100 px-4 py-3"
-          placeholder="Entrümpelung in Wien"
+          placeholder="Kellerentrümpelung in Graz"
         />
       </label>
       <div className="md:col-span-2 flex flex-col gap-3">
