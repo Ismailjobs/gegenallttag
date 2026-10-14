@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireAdminApi, unauthorized } from "@/lib/admin-api";
 import { generateCoverWebp } from "@/lib/images";
-import { coverPromptFromArticle } from "@/lib/cover-prompt";
+import { coverBriefFromArticle } from "@/lib/cover-prompt";
 import type { CategorySlug } from "@/lib/site";
 
 export const runtime = "nodejs";
@@ -20,7 +20,7 @@ export async function POST(
   if (!post) return NextResponse.json({ ok: false }, { status: 404 });
 
   try {
-    const visualPrompt = await coverPromptFromArticle({
+    const brief = await coverBriefFromArticle({
       title: post.title,
       subtitle: post.subtitle,
       html: post.content,
@@ -31,7 +31,7 @@ export async function POST(
       subtitle: post.subtitle,
       categorySlug: post.category.slug as CategorySlug,
       slug: post.slug,
-      coverPrompt: visualPrompt,
+      coverPrompt: brief.prompt,
     });
     if (!cover) {
       return NextResponse.json(
@@ -41,9 +41,9 @@ export async function POST(
     }
     await prisma.post.update({
       where: { id: post.id },
-      data: { coverImage: cover },
+      data: { coverImage: cover, coverAlt: brief.alt },
     });
-    return NextResponse.json({ ok: true, coverImage: cover });
+    return NextResponse.json({ ok: true, coverImage: cover, coverAlt: brief.alt });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Görsel üretilemedi.";
     return NextResponse.json({ ok: false, error: message }, { status: 500 });

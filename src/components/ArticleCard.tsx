@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { CalendarDays, Clock } from "lucide-react";
 import { formatDate, readingLabel } from "@/lib/utils";
-import { resolveCover } from "@/lib/cover";
+import { coverAltFor, resolveCover } from "@/lib/cover";
 import CoverImage from "./CoverImage";
 
 export type ArticleCardPost = {
@@ -12,6 +12,7 @@ export type ArticleCardPost = {
   readingTime: number;
   publishedAt?: Date | string | null;
   coverImage?: string | null;
+  coverAlt?: string | null;
   category: { name: string; slug: string };
 };
 
@@ -24,7 +25,11 @@ export default function ArticleCard({ post }: { post: ArticleCardPost }) {
       <Link href={href} className="relative block overflow-hidden rounded-2xl aspect-[16/10] bg-navy-50">
         <CoverImage
           src={image}
-          alt=""
+          alt={coverAltFor({
+            coverAlt: post.coverAlt,
+            title: post.title,
+            categorySlug: post.category.slug,
+          })}
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           className="object-cover transition duration-500 group-hover:scale-[1.04]"
         />

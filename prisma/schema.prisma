@@ -44,6 +44,7 @@ model Post {
   faqJson       String?
   schemaJson    String?
   coverImage    String?
+  coverAlt      String?
   status        String    @default("DRAFT")
   scheduledFor  DateTime?
   publishedAt   DateTime?

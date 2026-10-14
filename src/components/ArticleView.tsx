@@ -6,7 +6,7 @@ import ArticleCard from "./ArticleCard";
 import JsonLd from "./JsonLd";
 import { blogPostingSchema, faqPageSchema } from "@/lib/jsonld";
 import { SITE } from "@/lib/site";
-import { resolveCover } from "@/lib/cover";
+import { coverAltFor, resolveCover } from "@/lib/cover";
 import CoverImage from "./CoverImage";
 import type { Post, Category } from "@prisma/client";
 
@@ -83,7 +83,11 @@ export default function ArticleView({
           <div className="relative aspect-[16/10] overflow-hidden rounded-3xl bg-navy-50 shadow-lg shadow-navy-900/10">
             <CoverImage
               src={resolveCover(post.coverImage, post.category.slug)}
-              alt=""
+              alt={coverAltFor({
+                coverAlt: post.coverAlt,
+                title: post.title,
+                categorySlug: post.category.slug,
+              })}
               priority
               sizes="(max-width: 896px) 100vw, 896px"
               className="object-cover"

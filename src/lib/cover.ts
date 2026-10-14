@@ -1,3 +1,4 @@
+import { sanitizeAlt } from "./cover-prompt";
 import type { CategorySlug } from "./site";
 
 const STOCK: Record<CategorySlug, string> = {
@@ -17,4 +18,20 @@ export function resolveCover(
     return coverImage;
   }
   return STOCK[(categorySlug as CategorySlug)] || STOCK.entruempelung;
+}
+
+export function coverAltFor(params: {
+  coverAlt?: string | null;
+  title?: string | null;
+  categorySlug?: string | null;
+}) {
+  const custom = sanitizeAlt(params.coverAlt);
+  if (custom) return custom;
+  const slug = params.categorySlug || "";
+  if (slug === "umzug") return "Umzugswagen vor einem Haus in Österreich";
+  if (slug === "raeumung") return "Leerer Altbauraum mit Kartons am Fenster";
+  if (slug === "entruempelung") {
+    return "Kartons in einem Hofeingang, bereit zur Entrümpelung";
+  }
+  return params.title?.trim() || "Beitragsbild";
 }

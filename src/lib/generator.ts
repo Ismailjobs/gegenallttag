@@ -4,7 +4,7 @@ import { buildLinkPlan } from "./linking";
 import { getCategory, type CategorySlug } from "./site";
 import { slugify, uniqueSlug, type GeneratedArticle } from "./utils";
 import { generateCoverWebp } from "./images";
-import { coverPromptFromArticle } from "./cover-prompt";
+import { coverBriefFromArticle } from "./cover-prompt";
 import { researchTopic } from "./research";
 import { openingsTooSimilar, uniquenessHints } from "./uniqueness";
 import { stripHtml } from "./utils";
@@ -63,20 +63,22 @@ export async function generateArticleFromTopic(topicId: string) {
 
     const scheduledFor = nextSlot();
     let coverImage = coverFor(topic.categorySlug as CategorySlug);
+    let coverAlt = "";
     try {
-      const visualPrompt = await coverPromptFromArticle({
+      const brief = await coverBriefFromArticle({
         title: article.title,
         subtitle: article.subtitle,
         html,
         headings: article.sections.map((s) => s.heading),
         categorySlug: topic.categorySlug as CategorySlug,
       });
+      coverAlt = brief.alt;
       const generatedCover = await generateCoverWebp({
         title: article.title,
         subtitle: article.subtitle,
         categorySlug: topic.categorySlug as CategorySlug,
         slug,
-        coverPrompt: visualPrompt,
+        coverPrompt: brief.prompt,
       });
       if (generatedCover) coverImage = generatedCover;
     } catch (error) {
@@ -108,6 +110,7 @@ export async function generateArticleFromTopic(topicId: string) {
           articleSection: article.schema?.articleSection || category.name,
         }),
         coverImage,
+        coverAlt,
         status: "SCHEDULED",
         scheduledFor,
       },
