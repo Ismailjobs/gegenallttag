@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import KontaktForm from "@/components/KontaktForm";
+import { canonicalPath } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Kontakt",
   description: "Redaktionelle Anfragen an Gegen Alltag – kein Auftragsformular für Räumungen.",
+  alternates: { canonical: canonicalPath("/kontakt") },
 };
 
 export default function KontaktPage() {

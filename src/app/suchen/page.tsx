@@ -2,10 +2,15 @@ import type { Metadata } from "next";
 import ArticleCard from "@/components/ArticleCard";
 import { searchPosts } from "@/lib/queries";
 import { bootstrapDatabase } from "@/lib/bootstrap";
+import { canonicalPath } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = { title: "Suche" };
+export const metadata: Metadata = {
+  title: "Suche",
+  robots: { index: false, follow: true },
+  alternates: { canonical: canonicalPath("/suchen") },
+};
 
 export default async function SearchPage({
   searchParams,

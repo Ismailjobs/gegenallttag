@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { PUBLISHER, SITE } from "@/lib/site";
+import { canonicalPath, PUBLISHER, SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Impressum / Offenlegung gemäß § 25 MedienG",
   description: `Medieninhaber und Offenlegung von ${SITE.domain} gemäß § 25 MedienG.`,
+  alternates: { canonical: canonicalPath("/impressum") },
 };
 
 export default function ImpressumPage() {

@@ -23,6 +23,14 @@ export const SITE = {
   },
 };
 
+/** Absolute canonical without query, hash or trailing slash (except home). */
+export function canonicalPath(path = "/") {
+  const origin = siteOrigin();
+  const clean = String(path).split("?")[0].split("#")[0].replace(/\/+$/, "");
+  if (!clean || clean === "/") return origin;
+  return `${origin}${clean.startsWith("/") ? clean : `/${clean}`}`;
+}
+
 export const PUBLISHER = {
   name: "Nuran Duman",
   streetAddress: "Dr. Karl-Swoboda-Str. 25",

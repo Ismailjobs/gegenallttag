@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
-import { SITE } from "@/lib/site";
+import { canonicalPath, SITE } from "@/lib/site";
 
-export const metadata: Metadata = { title: "Datenschutz" };
+export const metadata: Metadata = {
+  title: "Datenschutz",
+  alternates: { canonical: canonicalPath("/datenschutz") },
+};
 
 export default function DatenschutzPage() {
   return (

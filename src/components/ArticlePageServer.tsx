@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ArticleView from "@/components/ArticleView";
 import { getPostBySlug, getRelatedPosts } from "@/lib/queries";
-import { getCategory, SITE, type CategorySlug } from "@/lib/site";
+import { canonicalPath, getCategory, type CategorySlug } from "@/lib/site";
 import { bootstrapDatabase } from "@/lib/bootstrap";
 
 export const dynamic = "force-dynamic";
@@ -12,15 +12,18 @@ export async function articleMetadata(
   slug: string,
 ): Promise<Metadata> {
   const post = await getPostBySlug(slug, categorySlug);
-  if (!post) return { title: "Beitrag nicht gefunden" };
+  if (!post) {
+    return { title: "Beitrag nicht gefunden", robots: { index: false, follow: false } };
+  }
   return {
     title: { absolute: post.metaTitle },
     description: post.metaDesc,
-    alternates: { canonical: `${SITE.url}/${categorySlug}/${post.slug}` },
+    alternates: { canonical: canonicalPath(`/${categorySlug}/${post.slug}`) },
     openGraph: {
       title: post.metaTitle,
       description: post.metaDesc,
       type: "article",
+      url: canonicalPath(`/${categorySlug}/${post.slug}`),
     },
   };
 }

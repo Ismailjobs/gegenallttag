@@ -5,13 +5,14 @@ import JsonLd from "@/components/JsonLd";
 import { collectionPageSchema } from "@/lib/jsonld";
 import { getPublishedPosts } from "@/lib/queries";
 import { bootstrapDatabase } from "@/lib/bootstrap";
-import { SITE } from "@/lib/site";
+import { canonicalPath, SITE } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Alle Ratgeber",
   description: "Alle Beiträge zu Entrümpelung, Räumung und Umzug in ganz Österreich.",
+  alternates: { canonical: canonicalPath("/ratgeber") },
 };
 
 export default async function RatgeberPage() {

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import { SITE } from "@/lib/site";
+import { canonicalPath, SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Über uns",
   description: `Was ${SITE.name} ist – und was nicht. Unabhängiger Ratgeber für ganz Österreich.`,
+  alternates: { canonical: canonicalPath("/ueber-uns") },
 };
 
 export default function AboutPage() {

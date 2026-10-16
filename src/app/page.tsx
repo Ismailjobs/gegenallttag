@@ -2,10 +2,16 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import Hero from "@/components/Hero";
 import ArticleCard from "@/components/ArticleCard";
+import type { Metadata } from "next";
 import { getPublishedPosts } from "@/lib/queries";
 import { bootstrapDatabase } from "@/lib/bootstrap";
+import { canonicalPath } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  alternates: { canonical: canonicalPath("/") },
+};
 
 export default async function HomePage() {
   await bootstrapDatabase();

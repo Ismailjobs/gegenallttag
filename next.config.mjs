@@ -7,8 +7,19 @@ const nextConfig = {
     serverComponentsExternalPackages: ["node-cron", "openai", "@prisma/client", "prisma", "sharp"],
   },
   compress: true,
+  trailingSlash: false,
   async rewrites() {
     return [{ source: "/rss.xml", destination: "/feed.xml" }];
+  },
+  async redirects() {
+    return [
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "www.gegenalltag.at" }],
+        destination: "https://gegenalltag.at/:path*",
+        permanent: true,
+      },
+    ];
   },
   images: {
     formats: ["image/avif", "image/webp"],
